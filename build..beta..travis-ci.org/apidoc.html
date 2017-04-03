@@ -1,0 +1,234 @@
+<div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a
+
+        href="https://github.com/jfhbrook/node-ecstatic"
+
+    >ecstatic (v2.1.0)</a>
+</h1>
+<h4>A simple static file server middleware that works with both Express and Flatiron</h4>
+<div class="apidocSectionDiv"><a
+    href="#apidoc.tableOfContents"
+    id="apidoc.tableOfContents"
+><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.ecstatic">module ecstatic</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.ecstatic.showDir">
+            function <span class="apidocSignatureSpan">ecstatic.</span>showDir
+            <span class="apidocSignatureSpan">(opts, stat)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <span class="apidocSignatureSpan">string <span class="apidocSignatureSpan">ecstatic.</span>version</span>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.ecstatic" id="apidoc.module.ecstatic">module ecstatic</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.ecstatic.showDir" id="apidoc.element.ecstatic.showDir">
+        function <span class="apidocSignatureSpan">ecstatic.</span>showDir
+        <span class="apidocSignatureSpan">(opts, stat)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">showDir = function (opts, stat) {
+  // opts are parsed by opts.js, defaults already applied
+  var cache = opts.cache,
+      root = path.resolve(opts.root),
+      baseDir = opts.baseDir,
+      humanReadable = opts.humanReadable,
+      handleError = opts.handleError,
+      showDotfiles = opts.showDotfiles,
+      si = opts.si,
+      weakEtags = opts.weakEtags;
+
+  return function middleware (req, res, next) {
+
+    // Figure out the path for the file from the given url
+    var parsed = url.parse(req.url),
+        pathname = decodeURIComponent(parsed.pathname),
+        dir = path.normalize(
+          path.join(root,
+            path.relative(
+              path.join(&#x27;/&#x27;, baseDir),
+              pathname
+            )
+          )
+        );
+
+    fs.stat(dir, function (err, stat) {
+      if (err) {
+        return handleError ? status[500](res, next, { error: err }) : next();
+      }
+
+      // files are the listing of dir
+      fs.readdir(dir, function (err, files) {
+        if (err) {
+          return handleError ? status[500](res, next, { error: err }) : next();
+        }
+
+        // Optionally exclude dotfiles from directory listing.
+        if (!showDotfiles) {
+          files = files.filter(function(filename){
+            return filename.slice(0,1) !== &#x27;.&#x27;;
+          });
+        }
+
+        res.setHeader(&#x27;content-type&#x27;, &#x27;text/html&#x27;);
+        res.setHeader(&#x27;etag&#x27;, etag(stat, weakEtags));
+        res.setHeader(&#x27;last-modified&#x27;, (new Date(stat.mtime)).toUTCString());
+        res.setHeader(&#x27;cache-control&#x27;, cache);
+
+        sortFiles(dir, files, function (lolwuts, dirs, files) {
+          // It&#x27;s possible to get stat errors for all sorts of reasons here.
+          // Unfortunately, our two choices are to either bail completely,
+          // or just truck along as though everything&#x27;s cool. In this case,
+          // I decided to just tack them on as &#x22;??!?&#x22; items along with dirs
+          // and files.
+          //
+          // Whatever.
+
+          // if it makes sense to, add a .. link
+          if (path.resolve(dir, &#x27;..&#x27;).slice(0, root.length) == root) {
+            return fs.stat(path.join(dir, &#x27;..&#x27;), function (err, s) {
+              if (err) {
+                return handleError ? status[500](res, next, { error: err }) : next();
+              }
+              dirs.unshift([ &#x27;..&#x27;, s ]);
+              render(dirs, files, lolwuts);
+            });
+          }
+          render(dirs, files, lolwuts);
+        });
+
+        function render(dirs, files, lolwuts) {
+          // each entry in the array is a [name, stat] tuple
+
+          var html = [
+            &#x27;&#x3c;!doctype html&#x3e;&#x27;,
+            &#x27;&#x3c;html&#x3e;&#x27;,
+            &#x27;  &#x3c;head&#x3e;&#x27;,
+            &#x27;    &#x3c;meta charset=&#x22;utf-8&#x22;&#x3e;&#x27;,
+            &#x27;    &#x3c;meta name=&#x22;viewport&#x22; content=&#x22;width=device-width&#x22;&#x3e;&#x27;,
+            &#x27;    &#x3c;title&#x3e;Index of &#x27; + he.encode(pathname) +&#x27;&#x3c;/title&#x3e;&#x27;,
+            &#x27;    &#x3c;style type=&#x22;text/css&#x22;&#x3e;&#x27; + css + &#x27;&#x3c;/style&#x3e;&#x27;,
+            &#x27;  &#x3c;/head&#x3e;&#x27;,
+            &#x27;  &#x3c;body&#x3e;&#x27;,
+            &#x27;&#x3c;h1&#x3e;Index of &#x27; + he.encode(pathname) + &#x27;&#x3c;/h1&#x3e;&#x27;
+          ].join(&#x27;\n&#x27;) + &#x27;\n&#x27;;
+
+          html += &#x27;&#x3c;table&#x3e;&#x27;;
+
+          var failed = false;
+          var writeRow = function (file, i) {
+            // render a row given a [name, stat] tuple
+            var isDir = file[1].isDirectory &#x26;&#x26; file[1].isDirectory();
+            var href = parsed.pathname.replace(/\/$/, &#x27;&#x27;) + &#x27;/&#x27; + encodeURIComponent(file[0]);
+
+            // append trailing slash and query for dir entry
+            if (isDir) {
+              href += &#x27;/&#x27; + he.encode((parsed.search)? parsed.search:&#x27;&#x27;);
+            }
+
+            var displayName = he.encode(file[0]) + ((isDir)? &#x27;/&#x27;:&#x27;&#x27;);
+
+            var ext = file[0].split(&#x27;.&#x27;).pop();
+
+            var iconClass = &#x27;icon-&#x27; + (isDir ? &#x27;_blank&#x27; : (supportedIcons[ext] ? ext : &#x27;_page&#x27;));
+
+            // TODO: use stylessheets?
+            html += &#x27;&#x3c;tr&#x3e;&#x27; +
+              &#x27;&#x3c;td class=&#x22;icon-parent&#x22;&#x3e;&#x3c;i class=&#x22;&#x27; + iconClass + &#x27;&#x22;&#x3e;&#x3c;/i&#x3e;&#x3c;/td&#x3e;&#x27; +
+              &#x27;&#x3c;td class=&#x22;perms&#x22;&#x3e;&#x3c;code&#x3e;(&#x27; + permsToString(file[1]) + &#x27;)&#x3c;/code&#x3e;&#x3c;/td&#x3e;&#x27; +
+              &#x27;&#x3c;td class=&#x22;file-size&#x22;&#x3e;&#x3c;code&#x3e;&#x27; + sizeToString(file[1], humanReadable, si) + &#x27;&#x3c;/code&#x3e;&#x3c;/td&#x3e;&#x27; + ...</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+Defaults to **false**.
+
+## middleware(req, res, next);
+
+This works more or less as you&#x27;d expect.
+
+### ecstatic.<span class="apidocCodeKeywordSpan">showDir</span>(folder);
+
+This returns another middleware which will attempt to show a directory view. Turning on auto-indexing is roughly equivalent to adding
+ this middleware after an ecstatic middleware with autoindexing disabled.
+
+### `ecstatic` command
+
+to start a standalone static http server,
+run `npm install -g ecstatic` and then run `ecstatic [dir?] [options] --port PORT`
+...</pre></li>
+    </ul>
+
+
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
