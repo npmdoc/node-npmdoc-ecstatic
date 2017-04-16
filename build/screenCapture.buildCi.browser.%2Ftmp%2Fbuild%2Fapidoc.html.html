@@ -56,9 +56,27 @@
 
         <li>
 
+            <a class="apidocElementLiA" href="#apidoc.element.ecstatic.ecstatic">
+            function <span class="apidocSignatureSpan"></span>ecstatic
+            <span class="apidocSignatureSpan">(dir, options)</span>
+            </a>
+
+        </li>
+
+        <li>
+
             <a class="apidocElementLiA" href="#apidoc.element.ecstatic.showDir">
             function <span class="apidocSignatureSpan">ecstatic.</span>showDir
             <span class="apidocSignatureSpan">(opts, stat)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.ecstatic.toString">
+            function <span class="apidocSignatureSpan">ecstatic.</span>toString
+            <span class="apidocSignatureSpan">()</span>
             </a>
 
         </li>
@@ -75,6 +93,147 @@
 
 <div class="apidocSectionDiv">
 <h1><a href="#apidoc.module.ecstatic" id="apidoc.module.ecstatic">module ecstatic</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.ecstatic.ecstatic" id="apidoc.element.ecstatic.ecstatic">
+        function <span class="apidocSignatureSpan"></span>ecstatic
+        <span class="apidocSignatureSpan">(dir, options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">ecstatic = function (dir, options) {
+  if (typeof dir !== 'string') {
+    options = dir;
+    dir = options.root;
+  }
+
+  var root = path.join(path.resolve(dir), '/'),
+      opts = optsParser(options),
+      cache = opts.cache,
+      autoIndex = opts.autoIndex,
+      baseDir = opts.baseDir,
+      defaultExt = opts.defaultExt,
+      handleError = opts.handleError,
+      headers = opts.headers,
+      serverHeader = opts.serverHeader,
+      weakEtags = opts.weakEtags,
+      handleOptionsMethod = opts.handleOptionsMethod;
+
+  opts.root = dir;
+  if (defaultExt &amp;&amp; /^\./.test(defaultExt)) defaultExt = defaultExt.replace(/^\./, '');
+
+  // Support hashes and .types files in mimeTypes @since 0.8
+  if (opts.mimeTypes) {
+    try {
+      // You can pass a JSON blob here---useful for CLI use
+      opts.mimeTypes = JSON.parse(opts.mimeTypes);
+    } catch (e) {}
+    if (typeof opts.mimeTypes === 'string') {
+      mime.load(opts.mimeTypes);
+    }
+    else if (typeof opts.mimeTypes === 'object') {
+      mime.define(opts.mimeTypes);
+    }
+  }
+
+
+  return function middleware (req, res, next) {
+
+    // Strip any null bytes from the url
+    // This was at one point necessary because of an old bug in url.parse
+    //
+    // See: https://github.com/jfhbrook/node-ecstatic/issues/16#issuecomment-3039914
+    // See: https://github.com/jfhbrook/node-ecstatic/commit/43f7e72a31524f88f47e367c3cc3af710e67c9f4
+    //
+    // But this opens up a regex dos attack vector! D:
+    //
+    // Based on some research (ie asking #node-dev if this is still an issue),
+    // it's *probably* not an issue. :)
+<span class="apidocCodeCommentSpan">    /*
+    while(req.url.indexOf('%00') !== -1) {
+      req.url = req.url.replace(/\%00/g, '');
+    }
+    */
+</span>
+    // Figure out the path for the file from the given url
+    var parsed = url.parse(req.url);
+    try {
+      decodeURIComponent(req.url); // check validity of url
+      var pathname = decodePathname(parsed.pathname);
+    }
+    catch (err) {
+      return status[400](res, next, { error: err });
+    }
+
+    var file = path.normalize(
+          path.join(root,
+            path.relative(
+              path.join('/', baseDir),
+              pathname
+            )
+          )
+        ),
+        gzipped = file + '.gz';
+
+    if(serverHeader !== false) {
+      // Set common headers.
+      res.setHeader('server', 'ecstatic-'+version);
+    }
+    Object.keys(headers).forEach(function (key) {
+      res.setHeader(key, headers[key])
+    })
+
+    if (req.method === 'OPTIONS' &amp;&amp; handleOptionsMethod) {
+      return res.end();
+    }
+
+    // TODO: This check is broken, which causes the 403 on the
+    // expected 404.
+    if (file.slice(0, root.length) !== root) {
+      return status[403](res, next);
+    }
+
+    if (req.method &amp;&amp; (req.method !== 'GET' &amp;&amp; req.method !== 'HEAD' )) {
+      return status[405](res, next);
+    }
+
+    function statFile() {
+      fs.stat(file, function (err, stat) {
+        if (err &amp;&amp; (err.code === 'ENOENT' || err.code === 'ENOTDIR')) {
+          if (req.statusCode == 404) {
+            // This means we're already trying ./404.html and can not find it.
+            // So send plain text response with 404 status code
+            status[404](res, next);
+          }
+          else if (!path.extname(parsed.pathname).length &amp;&amp; defaultExt) {
+            // If there is no file extension in the path and we have a default
+            // extension try filename and default extension combination before rendering 404.html.
+            middleware({
+              url: parsed.pathname + '.' + defaultExt + ((parsed.search)? parsed.search:'')
+            }, res, next);
+          }
+          else {
+            // Try to serve default ./404.html
+            middleware({
+              url: (handleError ? ('/' + path.join(baseDir, '404.' + defaultExt)) : req.url),
+              statusCode: 404
+            }, res, next);
+          }
+        }
+        else if (err) {
+          status[500](res, next, { error: err });
+        }
+        else if (stat.isDirectory()) {
+          if (!autoIndex &amp;&amp; !opts.showDir) {
+            status[404](res, next);
+            return;
+          }
+
+          // 3 ...</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
 
 
     <h2>
@@ -212,6 +371,21 @@ This returns another middleware which will attempt to show a directory view. Tur
 to start a standalone static http server,
 run `npm install -g ecstatic` and then run `ecstatic [dir?] [options] --port PORT`
 ...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.ecstatic.toString" id="apidoc.element.ecstatic.toString">
+        function <span class="apidocSignatureSpan">ecstatic.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">toString = function () {
+    return toString;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
 
 
