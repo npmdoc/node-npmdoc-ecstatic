@@ -1,4 +1,7 @@
-# api documentation for  [ecstatic (v2.1.0)](https://github.com/jfhbrook/node-ecstatic)  [![npm package](https://img.shields.io/npm/v/npmdoc-ecstatic.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-ecstatic) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-ecstatic.svg)](https://travis-ci.org/npmdoc/node-npmdoc-ecstatic)
+# npmdoc-ecstatic
+
+#### basic api documentation for  [ecstatic (v2.1.0)](https://github.com/jfhbrook/node-ecstatic)  [![npm package](https://img.shields.io/npm/v/npmdoc-ecstatic.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-ecstatic) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-ecstatic.svg)](https://travis-ci.org/npmdoc/node-npmdoc-ecstatic)
+
 #### A simple static file server middleware that works with both Express and Flatiron
 
 [![NPM](https://nodei.co/npm/ecstatic.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/ecstatic)
