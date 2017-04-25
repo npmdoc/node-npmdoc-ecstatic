@@ -74,10 +74,7 @@
 
         <li>
 
-            <a class="apidocElementLiA" href="#apidoc.element.ecstatic.toString">
-            function <span class="apidocSignatureSpan">ecstatic.</span>toString
-            <span class="apidocSignatureSpan">()</span>
-            </a>
+            <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">ecstatic.</span>status_handlers</span>
 
         </li>
 
@@ -89,26 +86,67 @@
 
     </ol></li>
 
-    <li class="apidocModuleLi"><a href="#apidoc.module.ecstatic.showDir">module ecstatic.showDir</a><ol>
+    <li class="apidocModuleLi"><a href="#apidoc.module.ecstatic.status_handlers">module ecstatic.status_handlers</a><ol>
 
         <li>
 
-            <a class="apidocElementLiA" href="#apidoc.element.ecstatic.showDir.showDir">
-            function <span class="apidocSignatureSpan">ecstatic.</span>showDir
-            <span class="apidocSignatureSpan">(opts, stat)</span>
+            <a class="apidocElementLiA" href="#apidoc.element.ecstatic.status_handlers.304">
+            function <span class="apidocSignatureSpan">ecstatic.status_handlers.</span>304
+            <span class="apidocSignatureSpan">(res, next)</span>
             </a>
 
         </li>
 
-    </ol></li>
+        <li>
 
-    <li class="apidocModuleLi"><a href="#apidoc.module.ecstatic.toString">module ecstatic.toString</a><ol>
+            <a class="apidocElementLiA" href="#apidoc.element.ecstatic.status_handlers.400">
+            function <span class="apidocSignatureSpan">ecstatic.status_handlers.</span>400
+            <span class="apidocSignatureSpan">(res, next, opts)</span>
+            </a>
+
+        </li>
 
         <li>
 
-            <a class="apidocElementLiA" href="#apidoc.element.ecstatic.toString.toString">
-            function <span class="apidocSignatureSpan">ecstatic.</span>toString
-            <span class="apidocSignatureSpan">()</span>
+            <a class="apidocElementLiA" href="#apidoc.element.ecstatic.status_handlers.403">
+            function <span class="apidocSignatureSpan">ecstatic.status_handlers.</span>403
+            <span class="apidocSignatureSpan">(res, next)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.ecstatic.status_handlers.404">
+            function <span class="apidocSignatureSpan">ecstatic.status_handlers.</span>404
+            <span class="apidocSignatureSpan">(res, next)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.ecstatic.status_handlers.405">
+            function <span class="apidocSignatureSpan">ecstatic.status_handlers.</span>405
+            <span class="apidocSignatureSpan">(res, next, opts)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.ecstatic.status_handlers.416">
+            function <span class="apidocSignatureSpan">ecstatic.status_handlers.</span>416
+            <span class="apidocSignatureSpan">(res, next)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.ecstatic.status_handlers.500">
+            function <span class="apidocSignatureSpan">ecstatic.status_handlers.</span>500
+            <span class="apidocSignatureSpan">(res, next, opts)</span>
             </a>
 
         </li>
@@ -401,180 +439,184 @@ run `npm install -g ecstatic` and then run `ecstatic [dir?] [options] --port POR
 
 
 
+
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.ecstatic.status_handlers" id="apidoc.module.ecstatic.status_handlers">module ecstatic.status_handlers</a></h1>
+
+
     <h2>
-        <a href="#apidoc.element.ecstatic.toString" id="apidoc.element.ecstatic.toString">
-        function <span class="apidocSignatureSpan">ecstatic.</span>toString
-        <span class="apidocSignatureSpan">()</span>
+        <a href="#apidoc.element.ecstatic.status_handlers.304" id="apidoc.element.ecstatic.status_handlers.304">
+        function <span class="apidocSignatureSpan">ecstatic.status_handlers.</span>304
+        <span class="apidocSignatureSpan">(res, next)</span>
         </a>
     </h2>
     <ul>
-    <li>description and source-code<pre class="apidocCodePre">toString = function () {
-    return text;
+    <li>description and source-code<pre class="apidocCodePre">304 = function (res, next) {
+  res.statusCode = 304;
+  res.end();
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
 
 
 
-
-</div>
-
-<div class="apidocSectionDiv">
-<h1><a href="#apidoc.module.ecstatic.showDir" id="apidoc.module.ecstatic.showDir">module ecstatic.showDir</a></h1>
-
-
     <h2>
-        <a href="#apidoc.element.ecstatic.showDir.showDir" id="apidoc.element.ecstatic.showDir.showDir">
-        function <span class="apidocSignatureSpan">ecstatic.</span>showDir
-        <span class="apidocSignatureSpan">(opts, stat)</span>
+        <a href="#apidoc.element.ecstatic.status_handlers.400" id="apidoc.element.ecstatic.status_handlers.400">
+        function <span class="apidocSignatureSpan">ecstatic.status_handlers.</span>400
+        <span class="apidocSignatureSpan">(res, next, opts)</span>
         </a>
     </h2>
     <ul>
-    <li>description and source-code<pre class="apidocCodePre">showDir = function (opts, stat) {
-  // opts are parsed by opts.js, defaults already applied
-  var cache = opts.cache,
-      root = path.resolve(opts.root),
-      baseDir = opts.baseDir,
-      humanReadable = opts.humanReadable,
-      handleError = opts.handleError,
-      showDotfiles = opts.showDotfiles,
-      si = opts.si,
-      weakEtags = opts.weakEtags;
-
-  return function middleware (req, res, next) {
-
-    // Figure out the path for the file from the given url
-    var parsed = url.parse(req.url),
-        pathname = decodeURIComponent(parsed.pathname),
-        dir = path.normalize(
-          path.join(root,
-            path.relative(
-              path.join('/', baseDir),
-              pathname
-            )
-          )
-        );
-
-    fs.stat(dir, function (err, stat) {
-      if (err) {
-        return handleError ? status[500](res, next, { error: err }) : next();
-      }
-
-      // files are the listing of dir
-      fs.readdir(dir, function (err, files) {
-        if (err) {
-          return handleError ? status[500](res, next, { error: err }) : next();
-        }
-
-        // Optionally exclude dotfiles from directory listing.
-        if (!showDotfiles) {
-          files = files.filter(function(filename){
-            return filename.slice(0,1) !== '.';
-          });
-        }
-
-        res.setHeader('content-type', 'text/html');
-        res.setHeader('etag', etag(stat, weakEtags));
-        res.setHeader('last-modified', (new Date(stat.mtime)).toUTCString());
-        res.setHeader('cache-control', cache);
-
-        sortFiles(dir, files, function (lolwuts, dirs, files) {
-          // It's possible to get stat errors for all sorts of reasons here.
-          // Unfortunately, our two choices are to either bail completely,
-          // or just truck along as though everything's cool. In this case,
-          // I decided to just tack them on as "??!?" items along with dirs
-          // and files.
-          //
-          // Whatever.
-
-          // if it makes sense to, add a .. link
-          if (path.resolve(dir, '..').slice(0, root.length) == root) {
-            return fs.stat(path.join(dir, '..'), function (err, s) {
-              if (err) {
-                return handleError ? status[500](res, next, { error: err }) : next();
-              }
-              dirs.unshift([ '..', s ]);
-              render(dirs, files, lolwuts);
-            });
-          }
-          render(dirs, files, lolwuts);
-        });
-
-        function render(dirs, files, lolwuts) {
-          // each entry in the array is a [name, stat] tuple
-
-          var html = [
-            '&lt;!doctype html&gt;',
-            '&lt;html&gt;',
-            '  &lt;head&gt;',
-            '    &lt;meta charset="utf-8"&gt;',
-            '    &lt;meta name="viewport" content="width=device-width"&gt;',
-            '    &lt;title&gt;Index of ' + he.encode(pathname) +'&lt;/title&gt;',
-            '    &lt;style type="text/css"&gt;' + css + '&lt;/style&gt;',
-            '  &lt;/head&gt;',
-            '  &lt;body&gt;',
-            '&lt;h1&gt;Index of ' + he.encode(pathname) + '&lt;/h1&gt;'
-          ].join('\n') + '\n';
-
-          html += '&lt;table&gt;';
-
-          var failed = false;
-          var writeRow = function (file, i) {
-            // render a row given a [name, stat] tuple
-            var isDir = file[1].isDirectory &amp;&amp; file[1].isDirectory();
-            var href = parsed.pathname.replace(/\/$/, '') + '/' + encodeURIComponent(file[0]);
-
-            // append trailing slash and query for dir entry
-            if (isDir) {
-              href += '/' + he.encode((parsed.search)? parsed.search:'');
-            }
-
-            var displayName = he.encode(file[0]) + ((isDir)? '/':'');
-
-            var ext = file[0].split('.').pop();
-
-            var iconClass = 'icon-' + (isDir ? '_blank' : (supportedIcons[ext] ? ext : '_page'));
-
-            // TODO: use stylessheets?
-            html += '&lt;tr&gt;' +
-              '&lt;td class="icon-parent"&gt;&lt;i class="' + iconClass + '"&gt;&lt;/i&gt;&lt;/td&gt;' +
-              '&lt;td class="perms"&gt;&lt;code&gt;(' + permsToString(file[1]) + ')&lt;/code&gt;&lt;/td&gt;' +
-              '&lt;td class="file-size"&gt;&lt;code&gt;' + sizeToString(file[1], humanReadable, si) + '&lt;/code&gt;&lt;/td&gt;' + ...</pre></li>
-    <li>example usage<pre class="apidocCodePre">...
-
-Defaults to **false**.
-
-## middleware(req, res, next);
-
-This works more or less as you'd expect.
-
-### ecstatic.<span class="apidocCodeKeywordSpan">showDir</span>(folder);
-
-This returns another middleware which will attempt to show a directory view. Turning on auto-indexing is roughly equivalent to adding
- this middleware after an ecstatic middleware with autoindexing disabled.
-
-### `ecstatic` command
-
-to start a standalone static http server,
-run `npm install -g ecstatic` and then run `ecstatic [dir?] [options] --port PORT`
-...</pre></li>
+    <li>description and source-code<pre class="apidocCodePre">400 = function (res, next, opts) {
+  res.statusCode = 400;
+  res.setHeader('content-type', 'text/html');
+  var error = opts &amp;&amp; opts.error ? String(opts.error) : 'Malformed request.',
+      html = [
+    '&lt;!doctype html&gt;',
+    '&lt;html&gt;',
+    '  &lt;head&gt;',
+    '    &lt;meta charset="utf-8"&gt;',
+    '    &lt;title&gt;400 Bad Request&lt;/title&gt;',
+    '  &lt;/head&gt;',
+    '  &lt;body&gt;',
+    '    &lt;p&gt;',
+    '      ' + he.encode(error),
+    '    &lt;/p&gt;',
+    '  &lt;/body&gt;',
+    '&lt;/html&gt;'
+  ].join('\n') + '\n';
+  res.end(html);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
 
 
-</div>
-
-<div class="apidocSectionDiv">
-<h1><a href="#apidoc.module.ecstatic.toString" id="apidoc.module.ecstatic.toString">module ecstatic.toString</a></h1>
-
 
     <h2>
-        <a href="#apidoc.element.ecstatic.toString.toString" id="apidoc.element.ecstatic.toString.toString">
-        function <span class="apidocSignatureSpan">ecstatic.</span>toString
-        <span class="apidocSignatureSpan">()</span>
+        <a href="#apidoc.element.ecstatic.status_handlers.403" id="apidoc.element.ecstatic.status_handlers.403">
+        function <span class="apidocSignatureSpan">ecstatic.status_handlers.</span>403
+        <span class="apidocSignatureSpan">(res, next)</span>
         </a>
     </h2>
     <ul>
-    <li>description and source-code<pre class="apidocCodePre">function toString() { [native code] }</pre></li>
+    <li>description and source-code<pre class="apidocCodePre">403 = function (res, next) {
+  res.statusCode = 403;
+  if (typeof next === "function") {
+    next();
+  }
+  else {
+    if (res.writable) {
+      res.setHeader('content-type', 'text/plain');
+      res.end('ACCESS DENIED');
+    }
+  }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.ecstatic.status_handlers.404" id="apidoc.element.ecstatic.status_handlers.404">
+        function <span class="apidocSignatureSpan">ecstatic.status_handlers.</span>404
+        <span class="apidocSignatureSpan">(res, next)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">404 = function (res, next) {
+  res.statusCode = 404;
+  if (typeof next === "function") {
+    next();
+  }
+  else {
+    if (res.writable) {
+      res.setHeader('content-type', 'text/plain');
+      res.end('File not found. :(');
+    }
+  }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.ecstatic.status_handlers.405" id="apidoc.element.ecstatic.status_handlers.405">
+        function <span class="apidocSignatureSpan">ecstatic.status_handlers.</span>405
+        <span class="apidocSignatureSpan">(res, next, opts)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">405 = function (res, next, opts) {
+  res.statusCode = 405;
+  if (typeof next === "function") {
+    next();
+  }
+  else {
+    res.setHeader('allow', (opts &amp;&amp; opts.allow) || 'GET, HEAD');
+    res.end();
+  }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.ecstatic.status_handlers.416" id="apidoc.element.ecstatic.status_handlers.416">
+        function <span class="apidocSignatureSpan">ecstatic.status_handlers.</span>416
+        <span class="apidocSignatureSpan">(res, next)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">416 = function (res, next) {
+  res.statusCode = 416;
+  if (typeof next === "function") {
+    next();
+  }
+  else {
+    if (res.writable) {
+      res.setHeader('content-type', 'text/plain');
+      res.end('Requested range not satisfiable');
+    }
+  }
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.ecstatic.status_handlers.500" id="apidoc.element.ecstatic.status_handlers.500">
+        function <span class="apidocSignatureSpan">ecstatic.status_handlers.</span>500
+        <span class="apidocSignatureSpan">(res, next, opts)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">500 = function (res, next, opts) {
+  res.statusCode = 500;
+  res.setHeader('content-type', 'text/html');
+  var error = String(opts.error.stack || opts.error || "No specified error"),
+      html = [
+    '&lt;!doctype html&gt;',
+    '&lt;html&gt;',
+    '  &lt;head&gt;',
+    '    &lt;meta charset="utf-8"&gt;',
+    '    &lt;title&gt;500 Internal Server Error&lt;/title&gt;',
+    '  &lt;/head&gt;',
+    '  &lt;body&gt;',
+    '    &lt;p&gt;',
+    '      ' + he.encode(error),
+    '    &lt;/p&gt;',
+    '  &lt;/body&gt;',
+    '&lt;/html&gt;'
+  ].join('\n') + '\n';
+  res.end(html);
+}</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
     </ul>
 
